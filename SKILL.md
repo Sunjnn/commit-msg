@@ -13,7 +13,7 @@ description: Generate a commit message from staged changes. Use when the user sa
 
 ## Message format
 
-- Start with a conventional commit prefix: `feat`, `fix`, `refac`, `style`, `chore`, `ci`, `build`, etc.
+- Start with a conventional commit prefix: `feat`, `fix`, `refac`, `style`, `doc`, `test`, `perf`, `revert`, `chore`, `ci`, `build`, etc.
 - English, one line, as short as possible
 - Use backticks for code references (function names, file names, etc.) when helpful, but not required
 - No trailing period
