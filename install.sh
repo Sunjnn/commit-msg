@@ -51,6 +51,7 @@ if [[ -e "$TARGET_FILE" ]] && ! $FORCE; then
 fi
 
 mkdir -p "$TARGET_DIR"
-ln -sf "$SCRIPT_DIR/SKILL.md" "$TARGET_FILE"
+rm -f "$TARGET_FILE"
+cp "$SCRIPT_DIR/SKILL.md" "$TARGET_FILE"
 
 echo "Installed $SKILL_NAME ($TARGET) -> $TARGET_FILE"
