@@ -4,9 +4,11 @@ SKILL_NAME="commit-msg"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FORCE=false
 TARGET="claude"
+# DeepSeek Harness scans <dshHome>/skills, where dshHome is $DSH_HOME or ~/.dsh
+DSH_HOME="${DSH_HOME:-$HOME/.dsh}"
 
 usage() {
-    echo "Usage: $0 [-f|--force] [-t|--target claude|qoder]" >&2
+    echo "Usage: $0 [-f|--force] [-t|--target claude|qoder|dsh]" >&2
     exit 1
 }
 
@@ -37,8 +39,11 @@ case "$TARGET" in
     qoder)
         TARGET_DIR="$HOME/.qoder/skills/$SKILL_NAME"
         ;;
+    dsh)
+        TARGET_DIR="$DSH_HOME/skills/$SKILL_NAME"
+        ;;
     *)
-        echo "Error: --target must be 'claude' or 'qoder' (got '$TARGET')" >&2
+        echo "Error: --target must be 'claude', 'qoder', or 'dsh' (got '$TARGET')" >&2
         exit 1
         ;;
 esac
