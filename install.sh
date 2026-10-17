@@ -8,7 +8,26 @@ TARGET="claude"
 DSH_HOME="${DSH_HOME:-$HOME/.dsh}"
 
 usage() {
-    echo "Usage: $0 [-f|--force] [-t|--target claude|qoder|dsh]" >&2
+    cat <<EOF
+Usage: $0 [OPTIONS]
+
+Install the $SKILL_NAME skill into a tool's skills directory.
+
+Options:
+  -f, --force          Overwrite the target SKILL.md if it already exists
+  -t, --target TARGET  Which tool to install for: claude (default), qoder, or dsh
+  -h, --help           Show this help message and exit
+
+Examples:
+  $0                     Install to ~/.claude/skills/$SKILL_NAME/
+  $0 -t dsh              Install to \$DSH_HOME/skills/$SKILL_NAME/
+  $0 -f -t qoder         Force install to ~/.qoder/skills/$SKILL_NAME/
+EOF
+}
+
+die() {
+    echo "Error: $*" >&2
+    echo "Try '$0 --help' for usage." >&2
     exit 1
 }
 
@@ -19,15 +38,18 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -t|--target)
+            if [[ $# -lt 2 || -z "$2" ]]; then
+                die "$1 requires a value (claude, qoder, or dsh)"
+            fi
             TARGET="$2"
             shift 2
             ;;
         -h|--help)
             usage
+            exit 0
             ;;
         *)
-            echo "Error: unknown argument '$1'" >&2
-            usage
+            die "unknown argument '$1'"
             ;;
     esac
 done
@@ -43,16 +65,14 @@ case "$TARGET" in
         TARGET_DIR="$DSH_HOME/skills/$SKILL_NAME"
         ;;
     *)
-        echo "Error: --target must be 'claude', 'qoder', or 'dsh' (got '$TARGET')" >&2
-        exit 1
+        die "--target must be 'claude', 'qoder', or 'dsh' (got '$TARGET')"
         ;;
 esac
 
 TARGET_FILE="$TARGET_DIR/SKILL.md"
 
 if [[ -e "$TARGET_FILE" ]] && ! $FORCE; then
-    echo "Error: $TARGET_FILE already exists. Use -f to overwrite." >&2
-    exit 1
+    die "$TARGET_FILE already exists. Use -f to overwrite."
 fi
 
 mkdir -p "$TARGET_DIR"
